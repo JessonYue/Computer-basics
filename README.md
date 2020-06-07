@@ -40,4 +40,17 @@
 - 第11章 掌握 11.4小节 其他通读
 - 第12章 重点 全部掌握
 
-**Tips:学有余力的同学在看到第7章的时候，建议阅读《程序员的自我修养：链接、装载与库》重点了解程序的装载、链接过程。**
+**Tips:学有余力的同学在看到第7章的时候，建议阅读《程序员的自我修养：链接、装载与库》重点了解程序的装载、链接过程。另外CMU官网上提供了这套书对应的课程，网上也很多人说要去刷PDF，刷LAB，我已经提前看了，基本上主流的一些LAB是下面的几个**
+
+~~~
+Data Lab：bit 运算与float的相关操作
+Bomb Lab：阅读汇编破解密码
+Attack Lab：Buffer Overflow 攻击
+Cache Lab：实现一个cache simulator已经一个cache efficient的矩阵转置。
+Shell Lab：用多进程实现一个简单的linux shell。主要是熟悉进程控制与同步。
+Malloc Lab：自己写一个C语言的malloc函数。
+Proxy Lab：写一个支持HTML的多线程Server。熟悉Unix网络编程与多线程的控制与同步。
+~~~
+http://csapp.cs.cmu.edu/3e/labs.html 官方的LAB
+http://www.cs.cmu.edu/~./213/schedule.html 官方的课程大纲
+大家可以不用花时间去看了，有一些设计到驱动层面的代码，不要花费太多时间，后期总结我会给大家说的。
