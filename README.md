@@ -22,7 +22,7 @@
 > 补充：深入理解计算机系统学习指南\n
   这本书真心推荐每一章都看一下，因为真的太经典了，它涵盖了很多的计算机基础理论的科目，所以要看一遍，就算你基础很差。下面的总结是相对的说法，相对能指点后续android的一些高级的基础的核心知识。
 
-### 看书的重点章节
+<h1 id="Tips">看书的重点章节预览:</h1> 
 - 第一章 通览
 - 第二章 整数和浮点数的表示
 - 第三章 通览
@@ -60,7 +60,7 @@ http://www.cs.cmu.edu/~./213/schedule.html 官方的课程大纲
 </br>
 <h1 id="license">License :page_facing_up:</h1>
 
-Copyright 2020 Philipp Jahoda
+Copyright 2020 路哥 & jesson
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
