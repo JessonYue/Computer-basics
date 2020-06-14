@@ -18,11 +18,10 @@
         - 动态内存开辟代码实践  XXX.c XXX.java
         - 遇到的问题.md
 
-
 > 补充：深入理解计算机系统学习指南\n
   这本书真心推荐每一章都看一下，因为真的太经典了，它涵盖了很多的计算机基础理论的科目，所以要看一遍，就算你基础很差。下面的总结是相对的说法，相对能指点后续android的一些高级的基础的核心知识。
 
-<h1 id="Tips">看书的重点章节预览:</h1> 
+## 看书的重点章节预览
 - ===第一部分====
 - 第一章 通览
 - 第二章 整数和浮点数的表示
@@ -42,24 +41,35 @@
 - 第12章 重点 全部掌握
 
 
-<h1 id="Tips">学习的Tips:</h1>
-**Tips:学有余力的同学在看到第7章的时候，建议阅读《程序员的自我修养：链接、装载与库》重点了解程序的装载、链接过程。另外CMU官网上提供了这套书对应的课程，网上也很多人说要去刷PDF，刷LAB，我已经提前看了，基本上主流的一些LAB是下面的几个**
+## 学习的Tips
+> **Tips**学有余力的同学在看到第7章的时候，建议阅读《程序员的自我修养：链接、装载与库》重点了解程序的装载、
+> 链接过程。另外CMU官网上提供了这套书对应的课程，网上也很多人说要去刷PDF，刷LAB，我已经提前看了，
+> 基本上主流的一些LAB是下面的几个content。
 
 ~~~
 Data Lab：bit 运算与float的相关操作
+
 Bomb Lab：阅读汇编破解密码
+
 Attack Lab：Buffer Overflow 攻击
+
 Cache Lab：实现一个cache simulator已经一个cache efficient的矩阵转置。
+
 Shell Lab：用多进程实现一个简单的linux shell。主要是熟悉进程控制与同步。
+
 Malloc Lab：自己写一个C语言的malloc函数。
+
 Proxy Lab：写一个支持HTML的多线程Server。熟悉Unix网络编程与多线程的控制与同步。
+
 ~~~
 
-http://csapp.cs.cmu.edu/3e/labs.html 官方的LAB
-http://www.cs.cmu.edu/~./213/schedule.html 官方的课程大纲
+http://csapp.cs.cmu.edu/3e/labs.html **官方的LAB**
+
+http://www.cs.cmu.edu/~./213/schedule.html **官方的课程大纲**
+
 大家可以不用花时间去看了，有一些设计到驱动层面的代码，不要花费太多时间，后期总结我会给大家说的。
-</br>
-<h1 id="license">License :page_facing_up:</h1>
+
+## License
 
 Copyright 2020 路哥 & jesson
 
@@ -74,5 +84,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-<br/>
