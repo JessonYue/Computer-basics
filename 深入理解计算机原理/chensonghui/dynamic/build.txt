@@ -1,0 +1,6 @@
+gcc -fpic add.c -o add.so
+gcc -fpic sub.c -o sub.so
+readelf  -a sub.so > sub.elf
+gcc  main.c add.so sub.so -o main
+objdump -d sub.so>sub.s
+objdump -d main>main.s
