@@ -1,6 +1,6 @@
 gcc -c add.c
 gcc -c sub.c
-ar rcs add.o sub.o
+ar rcs libmath.a add.o sub.o
 readelf  -a libmath.a > libmath.elf
 
 gcc -c main.c -0 main.o

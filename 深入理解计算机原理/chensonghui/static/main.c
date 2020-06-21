@@ -1,3 +1,4 @@
+#include "stdio.h"
 void add(int a,int b);
 void sub(int a, int b);
 int main(){
@@ -5,4 +6,5 @@ int main(){
     int b = 1;
     add(a,b);
     sub(a,b);
+	printf("haha");
 }
