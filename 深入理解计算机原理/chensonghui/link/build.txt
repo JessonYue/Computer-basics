@@ -1,0 +1,5 @@
+# 静态库和动态库打包函数的区别
+gcc -shared test.c -pthread -o test.so
+gcc -c test.c  -o test.o
+ar -rcs test.a test.o
+
