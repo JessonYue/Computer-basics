@@ -1,0 +1,731 @@
+#第一章
+预处理阶段->得到.i文件->编译阶段->得到.s文件->汇编阶段->得到.o文件（二进制文件）->链接阶段  
+优点：优化程序性能、理解链接时出现的错误、避免安全漏洞。  
+系统硬件的组成：1.总线、2.I/O设备、3.主存、4.处理器  
+CPU指令：加载、存储、操作、跳转  
+进程的虚拟空间组成：程序代码和数据、堆、共享库、栈、内核虚拟内存。  
+#第二章 信息的表示和处理
+##2.1 信息存储
+###2.1.1 十六进制表示法
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a3dc97efc9dd84bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.1.2 字数据大小
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2cbd7b5112ccb7ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.1.3 寻址和字节顺序
+小端法：最低有效字节在最前面。  
+大端法：最高有效字节在最前面。  
+个人理解：大端，正常方向；小端，反向。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-860ddaf0a62843d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.1.4 表示字符串
+C语言中，字符串被编码为一个以NULL（其值为0）字符结尾的字符数组。每个字符都由某个标准编码来表示，最常见的是ASCII字符码。
+###2.1.5 表示代码
+###2.1.6 布尔代数简介
+& - 当两边值都为1时结果才为1，其余情况都是0  
+|  - 当两边值有一个是1，结果就为1。  
+^ - 两边值不同为1，相同为0。  
+~ - 两边取反  
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e80977f6db2c6b12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-db2f35a8b035a610.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.1.7 C语言中的位级运算
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2eacfc9df137f6c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.1.8 C语言中的逻辑运算
+TRUE==》1  
+FALSE==》0  
+逻辑运算&&和||与它们对应的位级运算&和|之间第二个重要区别，如果对第一个参数求值就能确定表达式的结果，那么逻辑运算符就不会对第二个参数求值。
+###2.1.9 C语言中的移位运算
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-253ed4351736fa2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+<<左移：该值从右开始，向左移动4位，丢弃左边最高k个数字，右边添加4个0  
+\>>逻辑右移：左边补k个0，右边k个数字舍弃  
+\>>算术右移：左边补k个1（注意：这里是最高位是多少填充多少），右边k个数字舍弃  
+默认使用算术右移，但是无符号数是逻辑右移。  
+##2.2 整数表示
+###2.2.1 整数数据类型
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-71086ed93bea8ec6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.2.2 无符号数的编码：
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3a24730a021f2414.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+个人理解：这个公式其实就是把二进制数转成十进制数。  
+###2.2.3 补码编码：
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d7a86c2916931aa7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+个人理解：简单的说就是在最高位添加了个符号位。  
+原理：补码编码的唯一性。
+###2.2.4 有符号数和无符号数之间的转换：
+C语言允许在各种不同的数字数据类型之间做强制类型转换。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3fae27dc9d6c6447.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.2.5 C语言中的有符号数与无符号数
+尽管c语言标准没有指定有符号数要采用某种表示，但是几乎所有的机器都是用补码。通常，大多数数字都默认为是有符号的。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-bfe7899ca630739d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.2.6 扩展一个数字的位表示
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4b875d98040046bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.2.7 截断数字
+![截断无符号数](https://upload-images.jianshu.io/upload_images/2059604-a218288e34425e84.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![截断补码取值](https://upload-images.jianshu.io/upload_images/2059604-4df12974aa794c91.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.2.8 关于有符号数和无符号数的建议
+##2.3 整数运算
+个人理解：这里主要以数学公式的形式讲述了整数的运算。
+###2.3.1 无符号加法
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c2c57f9ef76a49a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-9e16e41f6cb566c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.2 补码加法
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e2519fb85c744b9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-339a220c762c5510.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.3 补码的非
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-47556f0c8a79716c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.4 无符号乘法
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8cc82763b1a31c27.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.5 补码乘法
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-390fa1940fe4571f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.6 乘以常数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-eac532e9f10b3b7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+注意：无论是无符号运算还是补码运算，乘以2的幂都可能会导致溢出。
+###2.3.7 除以2的幂
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2913535528375b99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-65eb6237f21becfd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2172d1c75843e4db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.3.8 关于整数运算的最后思考
+个人理解，关于整数的相关运算规则。
+##2.4 浮点数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-01d9b4caae078a09.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.4.1 二进制小数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d90e61ed40551fd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.4.2 IEEE浮点表示
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-88290179aa0a4590.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-dcb8d8c5da039f92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+情况1：当exp的位模式既不全为0（数值0），也不全为1（单精度数组为255，双精度数值为2047）  
+情况2：当补码域为全0时  
+情况3：当指阶码全为1的时候出现  
+###2.4.3 数字示例
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8dc3f9a698b15054.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-183deb35f3306aa6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.4.4 舍入
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-30adc47c3b9c10a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###2.4.5 浮点运算
+###2.4.6 C语言中的浮点数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3bc498ccd7da639a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+#第三章 程序的机器级表示
+个人理解：该章节主要讲了汇编，我们写的c代码是如何翻译成汇编语言到机器的寄存器的，没学过汇编，前部分还好，后面看不来。
+##3.1 历史观点
+##3.2 程序编码
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-df4227e73d835dd5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.2.1 机器级代码
+ ● 程序计数器（通常成为“PC”，在x86-64中用%rip表示）给出将要执行的下一条指令在内存中的地址。  
+ ● 整数寄存器文件包含16个命名的位置，分别存储64位的值。这些寄存器可以存储地址（对应于C语言的指针）或整数数据。有的寄存器被用来记录某些重要的程序状态，而其他的寄存器用来保存临时数据，例如过程的参数和局部变量，以及函数的返回值。  
+ ● 条件码寄存器保存着最近执行的算术或逻辑指令的状态信息。它们用来实现控制或数据流中的条件变化，比如说用来实现if和while语句。  
+ ● 一组向量寄存器可以存放一个或多个整数或浮点数值。  
+###3.2.2 代码示例
+在命令行上使用“-S”选项，就能看到C语言编译器产生的汇编代码  
+linux>gcc -Og -S xxx.c  
+使用“-C”命令行选项，GCC会编译并汇编该代码  
+linux>gcc -Og -C xxx.c  
+这样会产生目标代码文件xxx.o，它是二进制格式的，无法直接查看。要查看机器代码文件的内容，有一类成为反汇编器的程序非常有用。在Linux系统中，带“-d”命令行标识的程序OBJDUMP可以充当这个角色。  
+linux>objdump -d xxx.o  
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2499886d9690297d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.2.3 关于格式的注解
+##3.3 数据格式
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-dd554bd504e7db7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##3.4 访问信息
+###3.4.1 操作数指示符
+大多数指令有一个或多个操作数，指示出执行一个操作中要使用的源数据值，以及放置结果的目的位置。  
+各种不同的操作数的可能性被分为三种类型  
+立即数：用来表示常数值。  
+寄存器：表示某个寄存器的内容。  
+内存引用：根据计算出来的地址访问某个内存位置。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-ca657148630e9e5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.4.2 数据传送指令
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3906de447fb89f08.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-98126a8c29d316a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.4.3 数据传送示例
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-808ebfc285e007b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.4.4 压入和探出栈数据
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a4686d0c6ef61fe1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##3.5 算术和逻辑操作
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-66a4d5c84902a7a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.5.1 有效加载地址
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-dc431cd136691257.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.5.2 一元和二元操作
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0ae7d3e45a89e525.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.5.3 移位操作
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f41340405d88b707.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.5.4 讨论
+###3.5.5 特殊的算术操作
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c65f6d1785bae997.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##3.6 控制
+###3.6.1 条件码
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-aafed7d95c6ea267.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.6.2 访问条件码
+条件码读取三种方法：
+1.根据条件码的某种组合，将一个字节设置为0或者1
+2.可以条件跳转到程序的某个其他的部分
+3.可以有条件地传送数据。
+###3.6.3 跳转指令
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-641fad5716cb38f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.6.4 跳转指令的编码
+###3.6.5 用条件控制来实现条件分支
+将条件表达式和语句从C语言翻译成机器代码，最常用的方式是结合有条件和无条件跳转。
+###3.6.6 用条件传送来实现条件分支
+###3.6.7 循环
+###3.6.8 switch语句
+##3.7 过程
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-57f05482af4c4424.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.7.1 运行时栈
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-595fc937114af7dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.7.2 转移控制
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4b8406aa82fbc430.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###3.7.3 数据传送
+###3.7.4 栈上的局部存储
+###3.7.5 寄存器中的局部存储空间
+###3.7.6 递归过程
+##3.8 数组分配和访问
+#第四章 处理器体系结构
+##4.1 Y86-64 指令集体系结构
+###4.1.1 程序员的可见状态
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7bb1a709bf94a025.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.1.2 Y86-64指令
+ ● x86-64的movq指令分成了4个不同的指令：irmovq、rrmovq、mrmovq、rmmovq，分别显示地指明源和目的的格式。源可以是立即数i，寄存器r或内存m。第一个字母表示源的类型，第二个字母表示目的的类型。  
+ ● 有4个整数操作指令，他们是addq、subq、andq和xorq，它们只对寄存器数据进行操作，而x86-64还允许对内存数据进行这些操作。这些指令会设置3个条件码ZF、SF和OF（零、符号、溢出）。  
+ ● 7个跳转指令，jmp、jle、jl、je、jne、jge和jg。  
+ ● 6个条件传送指令，cmovle、cmovl、cmove、comvne、cmovge和comvg。  
+ ● call指令将返回地址入栈，然后调到目的地址。   
+ ● ret指令从这样的调用中返回。
+ ● pushq和popq指令实现了入栈和出栈。
+ ● halt指令停止指令的执行。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-422717c74a1f2b30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.1.3 指令编码
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2b70f6cc9a1ed52e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d27842d682a008b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.1.4 Y86-64异常
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-13e47b3d2b3290dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.1.5 Y86-64程序
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-75512e5441174b8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.1.6 Y86-64指令的详情
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-01a6a6ada6751004.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##4.2 逻辑设计和硬件控制语言HCL
+###4.2.1 逻辑门
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0288357198c33731.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.2.2 组合电路和HCL布尔表达式
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0323ac64204ed13c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7dac79ced1e2d501.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.2.3 字级的组合电路和HCL整数表达式
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-275d0b1309df414a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3404a700ff603c41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.2.4 集合关系
+###4.2.5 存储器和时钟
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-55dbb248c404e3c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##4.3 Y86-64的顺序实现
+###4.3.1 将处理组织成阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8c5d3d753ad9d8a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.3.2 SEQ硬件结构
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-29d9849586ea6fa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.3.3 SEQ时序
+###4.3.4 SEQ阶段的实现
+1.取指阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b6e81ddc9e52f21f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+2.译码和写回阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c6c2ae539ad65d56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+3.执行阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-ecd0d497368cd7d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+4.访存阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-fb4e2db51c4cb645.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+5.更新PC阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e183822ea656ae5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##4.4 流水线的通用原理
+###4.4.1 计算流水线
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b779a0665b8b36d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a841da17cf305439.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.4.2 流水线操作的详细说明
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2a73cd547a598b6b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.4.3 流水线的局限性
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-bf55ccfca730ca71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1.不一致的划分  
+2.流水线过深，收益反而下降  
+###4.4.4 带反馈的流水线系统
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-26d50ee68e536b60.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##4.5 Y86-64流水线的实现
+###4.5.1 SEQ+：重新安排计算阶段
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-eead92a84f84b238.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###4.5.2 插入流水线寄存器
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e20b525ae2b2e6ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+#第五章 优化程序性能
+##5.9 提高并行性
+###5.9.1 多个累计变量
+对于一个可结合和可交换的合并运算来说，比如说整数加法或乘法，我们可以将一组合并运算分割成两个或更多的部分，并在最后合并结果来提高性能。
+###5.9.2 重新结合变换
+##5.10 优化合并代码的结果小结
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6699a47065d925e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##5.11 一些限制因素
+###5.11.1 寄存器溢出
+循环并行性的好处受汇编代码描述计算的能力限制。如果我们的并行度p超过了可用的寄存器数量，那么编译器会诉诸溢出，将某些临时值存放到内存中，通常是在运行时堆栈上分配空间。    
+一旦编译器必须要诉诸溢出，那么维护多个累积变量的优势就很可能消失。幸运的是，x86-64有足够多的寄存器，大多数循环在出现寄存器溢出之前就将达到吞吐量限制。    
+###5.11.2 分支预测和预测错误处罚
+当分支预测逻辑不能正确预测一个分支是否要跳转的时候，条件分支可能会招致很大的预测错误处罚。    
+1. 不要过分关心可预测的分支  
+2. 书写适合用条件传送实现的代码  
+##5.12 理解内存性能
+###5.12.1 加载的性能
+###5.12.1 存储的性能
+##5.13 应用：性能提高技术
+1. 高级设计，为遇到的问题选择适当的算法和数据结构。  
+2. 基本编码原则。避免限制优化的因素，这样编译器就能产生高效的代码。  
+消除连续的函数调用。  
+消除不必要的内存引用  
+3. 低级优化，结构化代码以利用硬件功能  
+展开循环，降低开销，并且使得进一步的优化成为可能。  
+通过使用例如多个累计变量和重新结合等技术，找到方法提高指令级并行。  
+用功能性的风格重写条件操作，使得编译采用条件数据传送。  
+##5.14 确认和消除性能瓶颈
+###5.14.1 程序剖析
+#第六章 存储器层次结构
+##6.1 存储技术
+###6.1.1 随机访问存储器
+1. 静态RAM：SRAM将每个位存储在一个双稳态的存储器单元里，每个单元是用一个六晶体管电路来实现的。他可以无限期地保持在两个不同的电压配置或状态之一。由于SRAM存储器单元的双稳态特性，只要有电，他就会永远地保存它的值。即使有干扰来扰乱电压，当干扰消除时，电路就会恢复到稳定值。  
+2. 动态RAM  
+DRAM将每个位存储为对一个电容的充电。这个电容非常小，通常只有大约30毫微微法拉——30*10-15法拉。  
+3.传统的DRAM  
+DRAM芯片中的单元（位）被分成d个超单元，每个超单元都由w个DRAM单元组成。一个dxw的DRAM总共存储了dw位信息。  
+4. 内存模块  
+DRAM芯片封装在内存模块中，它查到主板的扩展槽上。  
+5. 增强的DRAM  
+快页模式  
+扩展数据输出  
+同步DRAM  
+双倍数据速率同步  
+视频RAM  
+6. 非易失性存储器  
+非易失性存储器即使在关电之后，仍然保存着它们的信息。  
+7. 访问主存  
+###6.1.2 磁盘存储
+1. 磁盘构造
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7ce0d5f79cac9636.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+2. 磁盘容量
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-79d7c48a5aee2289.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-994953ba4da687b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+3. 磁盘操作  
+4. 逻辑磁盘块  
+5. 连接I/O设备  
+6. 访问磁盘  
+###6.1.3 固态硬盘
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cf6353412437af8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.1.4 存储技术趋势
+##6.2 局限性
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c8b143c9c64e7b0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.2.1 对程序数据引用的局部性
+###6.2.2 取指令的局部性
+###6.2.3 局部性小结
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3593a1ecebce791f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##6.3 存储器层次结构
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c685c12ccffb02d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.3.1 存储器层次结构中的缓存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8dbba3f25ed3c3ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1.缓存命中  
+2.缓存不命中  
+3.缓存不命中的种类  
+4.缓存管理  
+###6.3.2 存储器层次结构概念小结
+![[图片上传中...(image.png-534f9-1592886451099-0)]
+](https://upload-images.jianshu.io/upload_images/2059604-8e73f5dee072e15a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4d9ff148f922f7fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##6.4 高速缓存存储器
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-5be080aa3ee464cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.1 通用的高速缓存存储器组织结构
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0a08400a0203161c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-882769d2fa4dff30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.2 直接映射高速缓存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-9ebc28203a0bfd52.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2d4c0aca4564a099.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f73a1988af64ae9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e9e263ea98b262c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6c7811b21e5958c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.3 组相联高速缓存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cc085747ef66793e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-65f799016b9a37c3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-619ed69969263c71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.4 全相联高速缓存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3b9214f2f2e690e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e14357ae013ff17a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.5 有关写的问题
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-751823cf018734e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.4.6 一个真实的高速缓存层次结构的解剖
+###6.4.7 高速缓存参数的性能影响
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d500619e575edd86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-dcddbe16a6913ffb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-575724305ed6f3b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##6.5 编写高速缓存友好的代码
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a78cd5768562c03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-9a8375ea7d6074e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##6.6 综合：高速缓存对程序性能的影响
+###6.6.1 存储器山
+一个程序从存储系统中读数据的速率成为度吞吐量，或者有时成为读带宽。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d48fcf35e479ccd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###6.6.2 重新排列循环以提高空间局部性
+###6.6.3 在程序中利用局部性
+1. 将你的注意力集中在内循环上，大部分计算和内存访问都发生在这里。  
+2. 通过按照数据对象存储在内存中的顺序，以步长为1的来读数据，从而使得你程序中的空间局部性最大。  
+3. 一旦从存储器中读入了一个数据对象，就尽可能多地使用它，从而使得程序中的时间局部性最大。  
+##6.7 小结
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6cb777ed019d8805.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+#第七章 链接
+##7.1 编译器驱动程序
+大多数编译系统提供编译器驱动程序，它代表用户在需要时调用语言预处理器、编译器、汇编器和链接器。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3559dc4afdeaeed1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+驱动程序首先运行C预处理器，它将C的源代码翻译成一个ASCII码的中间文件，接下来，驱动程序运行C编译器，它将该文件翻译成一个ASCII汇编语言文件，然后驱动程序运行汇编器，在翻译成一个可重定位目标文件。最后，它运行链接器程序id，将一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。要运行prog，只要输入./prog，shell调用操作系统中一个叫做加载器的函数，它将可执行文件prog中的代码和数据复制到内存，然后将控制转移到这个程序的开头。
+##7.2 静态链接
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-44ad72081cc03d46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.3 目标文件
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0730d991b160a5b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.4 可重定位目标文件
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c9512884013f0516.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b94870a484c22028.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.5 符号和符号表
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-181de85bc08e5324.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.6 符号解析
+###7.6.1 链接器如何解析多重定义的全局符号
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e6f5007e3f7c3b79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.6.2 与静态库链接
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-39fcef740d29b8b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.6.3 链接器如何使用静态库来解析引用
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cf2529094703d934.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2472dcdfe1726b57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.7 重定位
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-025090c3dedfc20f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.7.1 重定位条目
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-ada471776066ca75.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.7.2 重定位符号引用
+1. 重定位PC相对引用  
+2. 重定位PC绝对引用  
+##7.8 可执行目标文件
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-bb76d22aacede8f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.9 加载可执行目标文件
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-194d276f4ddf3df5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.10 动态链接共享库
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-49ce87b98eaf02c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.11 从应用程序中加载和链接共享库
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3ae55d272cf5021f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.12 位置无关代码
+1. PIC数据引用  
+2. PIC函数调用  
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c282fad27eedf67c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7e8e4d6e8e9e30a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4b43076149de60b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.13 库打桩机制
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-07ab9bb92e7555a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.13.1 编译时打桩
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cce9886ead1f6566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###7.13.2 链接时打桩
+###7.13.3 运行时打桩
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3102deb1bbe87bf0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.14 处理目标文件的工具
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c205a46a87b9d6da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##7.15 小结
+#第八章 异常流控制
+##8.1 异常
+异常就是控制流中的突变，用来相应处理器状态中的某些变化。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d0a4d6ebcecc9950.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-97e33156a62f4b3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.1.1 异常处理
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b94a1d3853284dc8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.1.2 异常的类别
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a50f74f0e04728a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.1.3 Linux/x86-64 系统中的异常
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-85a2e6ffce3d8a70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1. Linux/x86-64 故障和终止  
+2. Linux/x86-64系统调用  
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-30cb9d4ec07839c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##8.2 进程
+进程提供给应用程序的关键抽象  
+一个独立的逻辑控制流，它提供了一个假象，好像我们的程序独占地使用处理器。  
+一个私有的地址控件，它提供了一个假象，好像我们的程序独占地使用内存系统。  
+###8.2.1 逻辑控制流
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-eaa84f79d7b17800.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.2.2 并发流
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-e8eba1ee9ebe891a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.2.3 私有地址空间
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2efbc801f41d791f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.2.4 用户模式和内核模式
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0b75de935b55a206.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.2.5 上下文切换
+内核为每个进程维持一个上下文，上下文就是内核重新启动一个被抢占的进程所需的状态。它由一些对象的值组成，这些对象包括通用目的寄存器、浮点寄存器、程序计数器、用户栈、状态寄存器、内核栈和各种内核数据结构，比如描述地址控件的页表、包含有关当前进程信息的进程表，以及包含进程已打开文件的信息的文件表。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-65fb44735d8985fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##8.3 系统调用错误处理
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6933590fc2ae1e7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##8.4 进程控制
+###8.4.1 获取进程ID
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-1ca432d091443119.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.4.2 创建和终止进程
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b4e1a1632186ad40.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-97c057b8d5c38748.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.4.3 回收子线程
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2fcc00851eae67ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1. 判定等待集合的成员  
+2. 修改默认行为  
+3. 检查已回收子进程的退出状态
+4. 错误条件
+5. wait函数
+6. 使用waitpid的示例
+###8.4.4 让进程休眠
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-33d49db9a64782ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.4.5 加载并运行程序
+###8.4.6 利用fork和execve运行程序
+##8.5 信号
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7081f661257b2e49.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.5.1 信号术语
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4de78c96d4df9215.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.5.2 发送信号
+1. 进程组
+2. 用/bin/kill 程序发送信号
+3. 从键盘发送信号
+4. 用kill函数发送信号
+5. 用alarm函数发送信号
+###8.5.3 接收信号
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c92b906d79c8ff6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.5.4 阻塞和解除阻塞信号
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0749363c438001d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###8.5.5 编写信号处理程序
+1. 安全的信号处理
+2. 正确的信号处理
+3. 可移植的信号处理
+###8.5.6 同步流以避免讨厌的并发错误
+###8.5.7 显式地等待信号
+##8.6 非本地跳转
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-4f289193af706d6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##8.7 操作进程的工具
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-df7130bb872cd2ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##8.8 小结
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3c55bcc82925d6e7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+#第九章 虚拟内存
+##9.1 物理和虚拟寻址
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-68adce058db51b9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c8828f7c3d41fb6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##9.2 地址空间
+##9.3 虚拟内存作为缓存的工具
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-889ba3884f7d835e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.1 DRAM缓存的组织结构
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-84a2ef4e069cc3bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.2 页表
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-3bf4a6b632317081.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.3 页命中
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-be2eedcc7ee89d6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.4 缺页
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-232c4f283e2c104a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.5 分配页面
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f462737be8e50547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.3.6 又是局部性救了我们
+##9.4 虚拟内存作为内存管理的工具
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-79212459dfa6818d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##9.5 虚拟内存作为内存保护的工具
+##9.6 地址翻译
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-445c6e473377620a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-2fbacf5cbeb31c2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.6.1 结合高速缓存和虚拟内存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8834183121ddd6ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.6.2 利用TLB加速地址翻译
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6c6df151031ded9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.6.3 多级页表
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d8423d19579a6924.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.6.4 综合：端到端的地址翻译
+##9.7 案例研究：Intel Core i7/Linux 内存系统
+###9.7.1 Core i7地址翻译
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c2610d4aca754ce6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-c03b2732ab69b093.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.7.2 Linux虚拟内存系统
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-027fbcb9bc49b896.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+1. Linux虚拟内存区域
+2. Linux缺页异常处理
+##9.8 内存映射
+###9.8.1 在看共享对象
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-35af559f21b1d9b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.8.2 再看fork函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-714ab056f4264208.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.8.3 再看execve函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f43ae74a2beee952.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.8.4 使用mmap函数的用户级内存映射
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8bf209c1b7f66bd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##9.9 动态内存分配
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-1906a0826dc2306b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-58e7366e16d76af6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.1 malloc 和 free 函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-ee96c32e0c0ac1fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.2 为什么要使用动态内存分配
+###9.9.3 分配器的要求和目标
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-b4bf3f1d1fb88d5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+目标1.最大化吞吐率
+目标2.最大化内存利用率
+###9.9.4 碎片
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0cb56f6e322eee9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.5 实现问题
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-8fbf2af49e25c22e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.6 隐式空闲链表
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-720600098383c877.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-fd553b701400a547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.7 放置已分配的块
+###9.9.8 分割空闲块
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cd3a1c1ff6040512.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.9 获取额外的堆内存
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cb8ba23b40003dc9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.10 合并空闲块
+###9.9.11 带边界标记的合并
+###9.9.12 综合：实现一个简单的分配器
+1. 通用分配器设计
+2. 操作空闲链表的基本常数和宏
+3. 创建初始空闲链表
+4. 释放和合并块
+5. 分配块
+###9.9.13 显式空闲链表
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-70c31ddd66b81962.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.9.14 分离的空闲链表
+1. 简单分离存储
+2. 分离适配
+3. 伙伴系统
+##9.10 垃圾收集
+###9.10.1 垃圾收集器的基本知识
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-5407e27c5d180f01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.10.2 Mark&Sweep垃圾收集器
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6758248950a7d328.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###9.10.3 C程序的保守Mark & Sweep
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-0addf689cc0a50a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##9.11 C程序中常见的与内存有关的错误
+###9.11.1 间接引用坏指针
+###9.11.2 读未初始化的内存
+###9.11.3 允许栈缓冲区溢出
+###9.11.4 假设指针和它们指向的对象是相同大小的
+###9.11.5 造成错位错误
+###9.11.6 引用指针，而不是它所指向的对象
+###9.11.7 误解指针运算
+###9.11.8 引用不存在的变量
+###9.11.9 引用空闲堆块中的数据
+##9.12 小结
+#第十章 系统级I/O
+##10.1 Unix I/O
+打开文件
+Linux shell创建的每个进程开始时都有三个打开的文件  
+改变当前的文件位置  
+读写文件  
+关闭文件  
+##10.2 文件
+普通文件包含任意数据  
+目录是包含一组链接的文件，其中每个链接都将一个文件名映射到一个文件，这个文件可能是另一个目录  
+套接字是用来与另一个进程进行跨网络通信的文件  
+##10.3 打开和关闭文件
+##10.4 读和写文件
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d2d3d92d11b99453.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##10.5 用RIO包健壮地读写
+1. 无缓冲的输入输出函数
+2. 带缓冲的输入函数
+##10.6 读取文件元数据
+##10.7 读取目录内容
+##10.8 共享文件
+1. 描述符表
+2. 文件表
+3. v-node表
+##10.9 I/O重定向
+##10.10 标准I/O
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d46450d5502694ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##10.11 综合：我该使用哪些I/O函数?
+##10.12 小结
+#第十一章 网络编程
+##11.1 客户端-服务端编程模型
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-20c3ff2bea9e16ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##11.2 网络
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a6f87f3d75f8dcef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##11.3 全球IP因特网
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f97a70faeff34537.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.3.1 IP地址
+###11.3.2 因特网域名
+###11.3.3 因特网连接
+##11.4 套接字接口
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-7aa9260b9d5d0023.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.1 套接字地址结构
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d30f71b4f23e5529.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.2 socket函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-f720004dc32971b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.3 connect函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6a586998c5547aaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.4 bind函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-cccbdc0bede20b04.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.5 listen函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-1eb7dc84a40e5b56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.6 accept函数
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d51aa4a8dba436d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.4.7 主机和服务的转换
+1. getaddrinfo函数
+2. getnameinfo函数
+###11.4.8 套接字接口的辅助函数
+1. open_clientfd函数
+2. open_listenfd函数
+###11.4.9 echo客户端和服务端的示例
+##11.5 Web服务器
+###11.5.1 Web基础
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-54ca00180c14e237.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###11.5.2 Web内容
+###11.5.3 HTTP事务
+1.HTTP请求
+2.HTTP响应
+###11.5.4 服务动态内容
+1. 客户端如何将程序参数传递个服务器
+2. 服务端如何将参数传递给子进程
+3. 服务器如何将其他信息传递给子进程
+4. 子进程将它的输出发送到哪里
+##11.6 综合：TINY Web服务器
+##11.7 小结
+#第十二章 并发编程
+##12.1 基于进程的并发编程
+###12.1.1 基于进程的并发服务器
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d77ce943435e368e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.1.2 进程的优劣
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-afb0d016d423ee1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##12.2 基于I/O多路复用的并发编程
+###12.2.1 基于I/O多路复用的并发事件驱动服务器
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-238337ad9e894d12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.2.2 基于I/O多路复用的优劣
+优点1. 它比基于进程的设计给了程序员更多的对程序行为的控制  
+优点2. 一个基于I/O多路复用的事件驱动服务器是运行在单一进程上下文中的，因此每个逻辑流都能访问该进程的全部地址控件。这使得在流之间共享数据变得很容易。  
+优点3. 事件驱动设计常常比基于进程的设计要高效得多，因为它们不需要进程上下文切换来调度新的流。  
+缺点：编码复杂，随着并发粒度的减小，复杂性还会上升。  
+##12.3 基于线程的并发编程
+###12.3.1 线程执行模型
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d5593df4d1f56026.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.3.2 Posix线程
+###12.3.3 创建线程
+###12.3.4 终止线程
+1. 当顶层的线程例程返回时，线程会隐式地终止
+2. 通过调用pthread_exit函数，线程会显式地终止。
+3. 某个对等线程调用Linux的exit函数，该函数终止进程以及所有与该进程相关的线程。
+4. 另一个对等线程通过以当前 线程ID作为参数调用pthread_cancel函数来终止当前线程。
+###12.3.5 回收已终止线程的资源
+###12.3.6 分离线程
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-76597f116832935d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.3.7 初始化线程
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-6a688984c993c07b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.3.8 基于线程的并发服务器
+##12.4 多线程程序中的共享变量
+###12.4.1 线程内存模型
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-78b656084a6e14eb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.4.2 将变量映射到内存
+1. 全局变量
+2. 本地自动变量
+3. 本地静态变量
+###12.4.3 共享变量
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-eb9e1167cd5a954b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##12.5 用信号量同步线程
+###12.5.1 进度图
+###12.5.2 信号量
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-d4ea04a543c60257.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.5.3 使用信号量来实现互斥
+###12.5.4 利用信号量来调度共享资源
+1. 生产者-消费者的问题
+2. 读者-写者问题
+###12.5.5 综合：基于预线程化的并发服务器
+##12.6 使用线程提高并发性
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-a4e425965db05265.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##12.7 其他并发问题
+###12.7.1 线程安全
+四个线程不安全函数类
+1. 不保护共享变量的函数。
+2. 保持跨越多个调用的状态的函数。
+3. 返回指向静态变量的指针的函数。
+4. 调用线程不安全函数的函数。
+###12.7.2 可重入性
+###12.7.3 在线程化的程序中使用已存在的库函数
+###12.7.4 竞争
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-ba2e971a9e2e44f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###12.7.5 死锁
+信号量引入了一种潜在的令人厌恶的运行时错误，叫做死锁。它指的是一组线程被阻塞了，等待一个永远也不会为真的条件。
+![image.png](https://upload-images.jianshu.io/upload_images/2059604-5fc3e4a6c650d41e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+##12.8 小结
