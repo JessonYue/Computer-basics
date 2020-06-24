@@ -123,6 +123,3 @@ X86-64信息模型
 ![image-20200604180641778](/Users/liuchang/Library/Application Support/typora-user-images/image-20200604180641778.png)
 
 加载有效地址：将数据从内存读取到寄存器，而没有引用内存。
-
-
-
