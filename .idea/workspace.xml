@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f2e25ad5-a24a-49c9-a1f8-904a00f5b8b6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0603.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0604.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0606周六笔记汇总.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0608关于链接的思考.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0609关于异常的思考.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0610关于进程的思考.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0611虚拟内存（还没有看）.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0613周六笔记心得.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/day1.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/day1路哥讲话.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/day2.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1dkiHd1iwVRsNYLtxr1S3tNxj86" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f2e25ad5-a24a-49c9-a1f8-904a00f5b8b6" name="Default Changelist" comment="" />
+      <created>1592975404654</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1592975404654</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:D:/projects/Computer-basics/深入理解计算机原理/zhuqiguang" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="1" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="92" y="92" width="1416" height="676" key="DiffContextDialog" timestamp="1592977259842">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="92" y="92" width="1416" height="676" key="DiffContextDialog/0.0.1600.860@0.0.1600.860" timestamp="1592977259842" />
+    <state x="646" y="342" key="VCS.ChangelistChooser" timestamp="1592977255572">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="646" y="342" key="VCS.ChangelistChooser/0.0.1600.860@0.0.1600.860" timestamp="1592977255572" />
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1592976918475">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="92" y="92" width="1416" height="676" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1600.860@0.0.1600.860" timestamp="1592976918475" />
+  </component>
+</project>
