@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/wuchao/CLionProjects/ElfReader/ElfHeaderReader.c
+stdio.h
+-
+stdlib.h
+-
+elf.h
+/Users/wuchao/CLionProjects/ElfReader/elf.h
+
+/Users/wuchao/CLionProjects/ElfReader/elf.h
+stdint.h
+-
+
