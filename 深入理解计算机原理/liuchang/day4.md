@@ -68,9 +68,9 @@ do-while
 
 do
 
-​    body-statement
-
-​    while（test-expr）
+    body-statement
+    
+    while（test-expr）
 
 如果求值的结果为非零，就继续循环，在do-while 情况下 ，循环至少会被执行一次。
 
@@ -80,7 +80,7 @@ while
 
 while（test-expr）
 
-​    body-statement
+    body-statement
 
 对值进行判断，如果不符合条件，则不会进入 body-statement，反之，则会进入循环体。
 
@@ -92,7 +92,7 @@ for
 
 for（init-expr; test-expo; update-expr）{
 
-​	body-statement
+	body-statement
 
 }
 
@@ -217,6 +217,3 @@ b和d 都是指针数组，因此每个数组元素都是8个字节。
 （2）使用GDB调试器
 
 ![image-20200606000414884](/Users/liuchang/Library/Application Support/typora-user-images/image-20200606000414884.png)
-
-
-
