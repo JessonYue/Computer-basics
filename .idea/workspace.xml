@@ -19,7 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad2d2486-b6b0-47bb-b095-0390498f585d" name="Default Changelist" comment="" />
+    <list default="true" id="ad2d2486-b6b0-47bb-b095-0390498f585d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0624深入理解计算机系统全书理解.md" beforeDir="false" afterPath="$PROJECT_DIR$/深入理解计算机原理/zhuqiguang/0624深入理解计算机系统全书理解.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,24 +44,12 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/深入理解计算机原理/wuchao/elfreader" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f2e25ad5-a24a-49c9-a1f8-904a00f5b8b6" name="Default Changelist" comment="" />
+      <changelist id="ad2d2486-b6b0-47bb-b095-0390498f585d" name="Default Changelist" comment="" />
       <created>1592975404654</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -96,13 +87,12 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="538" y="229" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1593000014566">
