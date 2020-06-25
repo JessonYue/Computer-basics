@@ -1,5 +1,504 @@
-# 静态库和动态库打包函数的区别
-gcc -shared test.c -pthread -o test.so
-gcc -c test.c  -o test.o
-ar -rcs test.a test.o
+readelf -S a.o
 
+There are 12 section headers, starting at offset 0x370:
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .text             PROGBITS         0000000000000000  00000040
+       000000000000005a  0000000000000000  AX       0     0     1
+  [ 2] .rela.text        RELA             0000000000000000  00000298
+       0000000000000060  0000000000000018   I       9     1     8
+  [ 3] .data             PROGBITS         0000000000000000  0000009c
+       0000000000000004  0000000000000000  WA       0     0     4
+  [ 4] .bss              NOBITS           0000000000000000  000000a0
+       0000000000000000  0000000000000000  WA       0     0     1
+  [ 5] .comment          PROGBITS         0000000000000000  000000a0
+       000000000000002a  0000000000000001  MS       0     0     1
+  [ 6] .note.GNU-stack   PROGBITS         0000000000000000  000000ca
+       0000000000000000  0000000000000000           0     0     1
+  [ 7] .eh_frame         PROGBITS         0000000000000000  000000d0
+       0000000000000038  0000000000000000   A       0     0     8
+  [ 8] .rela.eh_frame    RELA             0000000000000000  000002f8
+       0000000000000018  0000000000000018   I       9     7     8
+  [ 9] .symtab           SYMTAB           0000000000000000  00000108
+       0000000000000150  0000000000000018          10     8     8
+  [10] .strtab           STRTAB           0000000000000000  00000258
+       000000000000003f  0000000000000000           0     0     1
+  [11] .shstrtab         STRTAB           0000000000000000  00000310
+       0000000000000059  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+  
+  
+readelf  -s a.o
+
+Symbol table '.symtab' contains 14 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS a.c
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3
+     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4
+     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    6
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    7
+     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    5
+     8: 0000000000000000     4 OBJECT  GLOBAL DEFAULT    3 b
+     9: 0000000000000000    90 FUNC    GLOBAL DEFAULT    1 main
+    10: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND shared
+    11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _GLOBAL_OFFSET_TABLE_
+    12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND swap
+    13: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __stack_chk_fail
+	
+readelf  -r a.o
+
+Relocation section '.rela.text' at offset 0x298 contains 4 entries:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000000020  000800000002 R_X86_64_PC32     0000000000000000 b - 4
+00000000002e  000a00000002 R_X86_64_PC32     0000000000000000 shared - 4
+00000000003b  000c00000004 R_X86_64_PLT32    0000000000000000 swap - 4
+000000000054  000d00000004 R_X86_64_PLT32    0000000000000000 __stack_chk_fail - 4
+
+Relocation section '.rela.eh_frame' at offset 0x2f8 contains 1 entry:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000000020  000200000002 R_X86_64_PC32     0000000000000000 .text + 0
+
+
+objdump -d a.o
+
+a.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <main>:
+   0:   55                      push   %rbp
+   1:   48 89 e5                mov    %rsp,%rbp
+   4:   48 83 ec 10             sub    $0x10,%rsp
+   8:   64 48 8b 04 25 28 00    mov    %fs:0x28,%rax
+   f:   00 00
+  11:   48 89 45 f8             mov    %rax,-0x8(%rbp)
+  15:   31 c0                   xor    %eax,%eax
+  17:   c7 45 f4 64 00 00 00    movl   $0x64,-0xc(%rbp)
+  1e:   8b 05 00 00 00 00       mov    0x0(%rip),%eax        # 24 <main+0x24>
+  24:   89 45 f4                mov    %eax,-0xc(%rbp)
+  27:   48 8d 45 f4             lea    -0xc(%rbp),%rax
+  2b:   48 8d 35 00 00 00 00    lea    0x0(%rip),%rsi        # 32 <main+0x32>
+  32:   48 89 c7                mov    %rax,%rdi
+  35:   b8 00 00 00 00          mov    $0x0,%eax
+  3a:   e8 00 00 00 00          callq  3f <main+0x3f>
+  3f:   b8 00 00 00 00          mov    $0x0,%eax
+  44:   48 8b 55 f8             mov    -0x8(%rbp),%rdx
+  48:   64 48 33 14 25 28 00    xor    %fs:0x28,%rdx
+  4f:   00 00
+  51:   74 05                   je     58 <main+0x58>
+  53:   e8 00 00 00 00          callq  58 <main+0x58>
+  58:   c9                      leaveq
+  59:   c3                      retq
+
+
+
+readelf -S ab
+
+There are 29 section headers, starting at offset 0x19b0:
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .interp           PROGBITS         0000000000000238  00000238
+       000000000000001c  0000000000000000   A       0     0     1
+  [ 2] .note.ABI-tag     NOTE             0000000000000254  00000254
+       0000000000000020  0000000000000000   A       0     0     4
+  [ 3] .note.gnu.build-i NOTE             0000000000000274  00000274
+       0000000000000024  0000000000000000   A       0     0     4
+  [ 4] .gnu.hash         GNU_HASH         0000000000000298  00000298
+       000000000000001c  0000000000000000   A       5     0     8
+  [ 5] .dynsym           DYNSYM           00000000000002b8  000002b8
+       00000000000000a8  0000000000000018   A       6     1     8
+  [ 6] .dynstr           STRTAB           0000000000000360  00000360
+       0000000000000098  0000000000000000   A       0     0     1
+  [ 7] .gnu.version      VERSYM           00000000000003f8  000003f8
+       000000000000000e  0000000000000002   A       5     0     2
+  [ 8] .gnu.version_r    VERNEED          0000000000000408  00000408
+       0000000000000030  0000000000000000   A       6     1     8
+  [ 9] .rela.dyn         RELA             0000000000000438  00000438
+       00000000000000c0  0000000000000018   A       5     0     8
+  [10] .rela.plt         RELA             00000000000004f8  000004f8
+       0000000000000018  0000000000000018  AI       5    22     8
+  [11] .init             PROGBITS         0000000000000510  00000510
+       0000000000000017  0000000000000000  AX       0     0     4
+  [12] .plt              PROGBITS         0000000000000530  00000530
+       0000000000000020  0000000000000010  AX       0     0     16
+  [13] .plt.got          PROGBITS         0000000000000550  00000550
+       0000000000000008  0000000000000008  AX       0     0     8
+  [14] .text             PROGBITS         0000000000000560  00000560
+       0000000000000222  0000000000000000  AX       0     0     16
+  [15] .fini             PROGBITS         0000000000000784  00000784
+       0000000000000009  0000000000000000  AX       0     0     4
+  [16] .rodata           PROGBITS         0000000000000790  00000790
+       0000000000000004  0000000000000004  AM       0     0     4
+  [17] .eh_frame_hdr     PROGBITS         0000000000000794  00000794
+       0000000000000044  0000000000000000   A       0     0     4
+  [18] .eh_frame         PROGBITS         00000000000007d8  000007d8
+       0000000000000128  0000000000000000   A       0     0     8
+  [19] .init_array       INIT_ARRAY       0000000000200db8  00000db8
+       0000000000000008  0000000000000008  WA       0     0     8
+  [20] .fini_array       FINI_ARRAY       0000000000200dc0  00000dc0
+       0000000000000008  0000000000000008  WA       0     0     8
+  [21] .dynamic          DYNAMIC          0000000000200dc8  00000dc8
+       00000000000001f0  0000000000000010  WA       6     0     8
+  [22] .got              PROGBITS         0000000000200fb8  00000fb8
+       0000000000000048  0000000000000008  WA       0     0     8
+  [23] .data             PROGBITS         0000000000201000  00001000
+       0000000000000018  0000000000000000  WA       0     0     8
+  [24] .bss              NOBITS           0000000000201018  00001018
+       0000000000000008  0000000000000000  WA       0     0     1
+  [25] .comment          PROGBITS         0000000000000000  00001018
+       0000000000000029  0000000000000001  MS       0     0     1
+  [26] .symtab           SYMTAB           0000000000000000  00001048
+       0000000000000648  0000000000000018          27    44     8
+  [27] .strtab           STRTAB           0000000000000000  00001690
+       000000000000021b  0000000000000000           0     0     1
+  [28] .shstrtab         STRTAB           0000000000000000  000018ab
+       00000000000000fe  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+  L (link order), O (extra OS processing required), G (group), T (TLS),
+  C (compressed), x (unknown), o (OS specific), E (exclude),
+  l (large), p (processor specific)
+  
+
+readelf -s ab
+
+Symbol table '.dynsym' contains 7 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTab
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __stack_chk_fail@GLIBC_2.4 (2)
+     3: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.2.5 (3)
+     4: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+     5: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+     6: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@GLIBC_2.2.5 (3)
+
+Symbol table '.symtab' contains 67 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000238     0 SECTION LOCAL  DEFAULT    1
+     2: 0000000000000254     0 SECTION LOCAL  DEFAULT    2
+     3: 0000000000000274     0 SECTION LOCAL  DEFAULT    3
+     4: 0000000000000298     0 SECTION LOCAL  DEFAULT    4
+     5: 00000000000002b8     0 SECTION LOCAL  DEFAULT    5
+     6: 0000000000000360     0 SECTION LOCAL  DEFAULT    6
+     7: 00000000000003f8     0 SECTION LOCAL  DEFAULT    7
+     8: 0000000000000408     0 SECTION LOCAL  DEFAULT    8
+     9: 0000000000000438     0 SECTION LOCAL  DEFAULT    9
+    10: 00000000000004f8     0 SECTION LOCAL  DEFAULT   10
+    11: 0000000000000510     0 SECTION LOCAL  DEFAULT   11
+    12: 0000000000000530     0 SECTION LOCAL  DEFAULT   12
+    13: 0000000000000550     0 SECTION LOCAL  DEFAULT   13
+    14: 0000000000000560     0 SECTION LOCAL  DEFAULT   14
+    15: 0000000000000784     0 SECTION LOCAL  DEFAULT   15
+    16: 0000000000000790     0 SECTION LOCAL  DEFAULT   16
+    17: 0000000000000794     0 SECTION LOCAL  DEFAULT   17
+    18: 00000000000007d8     0 SECTION LOCAL  DEFAULT   18
+    19: 0000000000200db8     0 SECTION LOCAL  DEFAULT   19
+    20: 0000000000200dc0     0 SECTION LOCAL  DEFAULT   20
+    21: 0000000000200dc8     0 SECTION LOCAL  DEFAULT   21
+    22: 0000000000200fb8     0 SECTION LOCAL  DEFAULT   22
+    23: 0000000000201000     0 SECTION LOCAL  DEFAULT   23
+    24: 0000000000201018     0 SECTION LOCAL  DEFAULT   24
+    25: 0000000000000000     0 SECTION LOCAL  DEFAULT   25
+    26: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    27: 0000000000000590     0 FUNC    LOCAL  DEFAULT   14 deregister_tm_clones
+    28: 00000000000005d0     0 FUNC    LOCAL  DEFAULT   14 register_tm_clones
+    29: 0000000000000620     0 FUNC    LOCAL  DEFAULT   14 __do_global_dtors_aux
+    30: 0000000000201018     1 OBJECT  LOCAL  DEFAULT   24 completed.7698
+    31: 0000000000200dc0     0 OBJECT  LOCAL  DEFAULT   20 __do_global_dtors_aux_fin
+    32: 0000000000000660     0 FUNC    LOCAL  DEFAULT   14 frame_dummy
+    33: 0000000000200db8     0 OBJECT  LOCAL  DEFAULT   19 __frame_dummy_init_array_
+    34: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS a.c
+    35: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS b.c
+    36: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    37: 00000000000008fc     0 OBJECT  LOCAL  DEFAULT   18 __FRAME_END__
+    38: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS
+    39: 0000000000200dc0     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_end
+    40: 0000000000200dc8     0 OBJECT  LOCAL  DEFAULT   21 _DYNAMIC
+    41: 0000000000200db8     0 NOTYPE  LOCAL  DEFAULT   19 __init_array_start
+    42: 0000000000000794     0 NOTYPE  LOCAL  DEFAULT   17 __GNU_EH_FRAME_HDR
+    43: 0000000000200fb8     0 OBJECT  LOCAL  DEFAULT   22 _GLOBAL_OFFSET_TABLE_
+    44: 0000000000000780     2 FUNC    GLOBAL DEFAULT   14 __libc_csu_fini
+    45: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMCloneTab
+    46: 0000000000201000     0 NOTYPE  WEAK   DEFAULT   23 data_start
+    47: 0000000000201010     4 OBJECT  GLOBAL DEFAULT   23 b
+    48: 0000000000201018     0 NOTYPE  GLOBAL DEFAULT   23 _edata
+    49: 0000000000000784     0 FUNC    GLOBAL DEFAULT   15 _fini
+    50: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __stack_chk_fail@@GLIBC_2
+    51: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@@GLIBC_
+    52: 0000000000201000     0 NOTYPE  GLOBAL DEFAULT   23 __data_start
+    53: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    54: 0000000000201008     0 OBJECT  GLOBAL HIDDEN    23 __dso_handle
+    55: 0000000000000790     4 OBJECT  GLOBAL DEFAULT   16 _IO_stdin_used
+    56: 0000000000000710   101 FUNC    GLOBAL DEFAULT   14 __libc_csu_init
+    57: 0000000000201020     0 NOTYPE  GLOBAL DEFAULT   24 _end
+    58: 0000000000000560    43 FUNC    GLOBAL DEFAULT   14 _start
+    59: 0000000000201018     0 NOTYPE  GLOBAL DEFAULT   24 __bss_start
+    60: 000000000000066a    90 FUNC    GLOBAL DEFAULT   14 main
+    61: 0000000000201018     0 OBJECT  GLOBAL HIDDEN    23 __TMC_END__
+    62: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneTable
+    63: 00000000000006c4    75 FUNC    GLOBAL DEFAULT   14 swap
+    64: 0000000000000000     0 FUNC    WEAK   DEFAULT  UND __cxa_finalize@@GLIBC_2.2
+    65: 0000000000000510     0 FUNC    GLOBAL DEFAULT   11 _init
+    66: 0000000000201014     4 OBJECT  GLOBAL DEFAULT   23 shared
+
+  
+readelf -r ab
+
+Relocation section '.rela.dyn' at offset 0x438 contains 8 entries:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000200db8  000000000008 R_X86_64_RELATIVE                    660
+000000200dc0  000000000008 R_X86_64_RELATIVE                    620
+000000201008  000000000008 R_X86_64_RELATIVE                    201008
+000000200fd8  000100000006 R_X86_64_GLOB_DAT 0000000000000000 _ITM_deregisterTMClone + 0
+000000200fe0  000300000006 R_X86_64_GLOB_DAT 0000000000000000 __libc_start_main@GLIBC_2.2.5 + 0
+000000200fe8  000400000006 R_X86_64_GLOB_DAT 0000000000000000 __gmon_start__ + 0
+000000200ff0  000500000006 R_X86_64_GLOB_DAT 0000000000000000 _ITM_registerTMCloneTa + 0
+000000200ff8  000600000006 R_X86_64_GLOB_DAT 0000000000000000 __cxa_finalize@GLIBC_2.2.5 + 0
+
+Relocation section '.rela.plt' at offset 0x4f8 contains 1 entry:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000200fd0  000200000007 R_X86_64_JUMP_SLO 0000000000000000 __stack_chk_fail@GLIBC_2.4 + 0
+
+
+
+objdump -d ab
+
+ab:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000000510 <_init>:
+ 510:   48 83 ec 08             sub    $0x8,%rsp
+ 514:   48 8b 05 cd 0a 20 00    mov    0x200acd(%rip),%rax        # 200fe8 <__gmon_start__>
+ 51b:   48 85 c0                test   %rax,%rax
+ 51e:   74 02                   je     522 <_init+0x12>
+ 520:   ff d0                   callq  *%rax
+ 522:   48 83 c4 08             add    $0x8,%rsp
+ 526:   c3                      retq
+
+Disassembly of section .plt:
+
+0000000000000530 <.plt>:
+ 530:   ff 35 8a 0a 20 00       pushq  0x200a8a(%rip)        # 200fc0 <_GLOBAL_OFFSET_TABLE_+0x8>
+ 536:   ff 25 8c 0a 20 00       jmpq   *0x200a8c(%rip)        # 200fc8 <_GLOBAL_OFFSET_TABLE_+0x10>
+ 53c:   0f 1f 40 00             nopl   0x0(%rax)
+
+0000000000000540 <__stack_chk_fail@plt>:
+ 540:   ff 25 8a 0a 20 00       jmpq   *0x200a8a(%rip)        # 200fd0 <__stack_chk_fail@GLIBC_2.4>
+ 546:   68 00 00 00 00          pushq  $0x0
+ 54b:   e9 e0 ff ff ff          jmpq   530 <.plt>
+
+Disassembly of section .plt.got:
+
+0000000000000550 <__cxa_finalize@plt>:
+ 550:   ff 25 a2 0a 20 00       jmpq   *0x200aa2(%rip)        # 200ff8 <__cxa_finalize@GLIBC_2.2.5>
+ 556:   66 90                   xchg   %ax,%ax
+
+Disassembly of section .text:
+
+0000000000000560 <_start>:
+ 560:   31 ed                   xor    %ebp,%ebp
+ 562:   49 89 d1                mov    %rdx,%r9
+ 565:   5e                      pop    %rsi
+ 566:   48 89 e2                mov    %rsp,%rdx
+ 569:   48 83 e4 f0             and    $0xfffffffffffffff0,%rsp
+ 56d:   50                      push   %rax
+ 56e:   54                      push   %rsp
+ 56f:   4c 8d 05 0a 02 00 00    lea    0x20a(%rip),%r8        # 780 <__libc_csu_fini>
+ 576:   48 8d 0d 93 01 00 00    lea    0x193(%rip),%rcx        # 710 <__libc_csu_init>
+ 57d:   48 8d 3d e6 00 00 00    lea    0xe6(%rip),%rdi        # 66a <main>
+ 584:   ff 15 56 0a 20 00       callq  *0x200a56(%rip)        # 200fe0 <__libc_start_main@GLIBC_2.2.5>
+ 58a:   f4                      hlt
+ 58b:   0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+
+0000000000000590 <deregister_tm_clones>:
+ 590:   48 8d 3d 81 0a 20 00    lea    0x200a81(%rip),%rdi        # 201018 <__TMC_END__>
+ 597:   55                      push   %rbp
+ 598:   48 8d 05 79 0a 20 00    lea    0x200a79(%rip),%rax        # 201018 <__TMC_END__>
+ 59f:   48 39 f8                cmp    %rdi,%rax
+ 5a2:   48 89 e5                mov    %rsp,%rbp
+ 5a5:   74 19                   je     5c0 <deregister_tm_clones+0x30>
+ 5a7:   48 8b 05 2a 0a 20 00    mov    0x200a2a(%rip),%rax        # 200fd8 <_ITM_deregisterTMCloneTable>
+ 5ae:   48 85 c0                test   %rax,%rax
+ 5b1:   74 0d                   je     5c0 <deregister_tm_clones+0x30>
+ 5b3:   5d                      pop    %rbp
+ 5b4:   ff e0                   jmpq   *%rax
+ 5b6:   66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
+ 5bd:   00 00 00
+ 5c0:   5d                      pop    %rbp
+ 5c1:   c3                      retq
+ 5c2:   0f 1f 40 00             nopl   0x0(%rax)
+ 5c6:   66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
+ 5cd:   00 00 00
+
+00000000000005d0 <register_tm_clones>:
+ 5d0:   48 8d 3d 41 0a 20 00    lea    0x200a41(%rip),%rdi        # 201018 <__TMC_END__>
+ 5d7:   48 8d 35 3a 0a 20 00    lea    0x200a3a(%rip),%rsi        # 201018 <__TMC_END__>
+ 5de:   55                      push   %rbp
+ 5df:   48 29 fe                sub    %rdi,%rsi
+ 5e2:   48 89 e5                mov    %rsp,%rbp
+ 5e5:   48 c1 fe 03             sar    $0x3,%rsi
+ 5e9:   48 89 f0                mov    %rsi,%rax
+ 5ec:   48 c1 e8 3f             shr    $0x3f,%rax
+ 5f0:   48 01 c6                add    %rax,%rsi
+ 5f3:   48 d1 fe                sar    %rsi
+ 5f6:   74 18                   je     610 <register_tm_clones+0x40>
+ 5f8:   48 8b 05 f1 09 20 00    mov    0x2009f1(%rip),%rax        # 200ff0 <_ITM_registerTMCloneTable>
+ 5ff:   48 85 c0                test   %rax,%rax
+ 602:   74 0c                   je     610 <register_tm_clones+0x40>
+ 604:   5d                      pop    %rbp
+ 605:   ff e0                   jmpq   *%rax
+ 607:   66 0f 1f 84 00 00 00    nopw   0x0(%rax,%rax,1)
+ 60e:   00 00
+ 610:   5d                      pop    %rbp
+ 611:   c3                      retq
+ 612:   0f 1f 40 00             nopl   0x0(%rax)
+ 616:   66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
+ 61d:   00 00 00
+
+0000000000000620 <__do_global_dtors_aux>:
+ 620:   80 3d f1 09 20 00 00    cmpb   $0x0,0x2009f1(%rip)        # 201018 <__TMC_END__>
+ 627:   75 2f                   jne    658 <__do_global_dtors_aux+0x38>
+ 629:   48 83 3d c7 09 20 00    cmpq   $0x0,0x2009c7(%rip)        # 200ff8 <__cxa_finalize@GLIBC_2.2.5>
+ 630:   00
+ 631:   55                      push   %rbp
+ 632:   48 89 e5                mov    %rsp,%rbp
+ 635:   74 0c                   je     643 <__do_global_dtors_aux+0x23>
+ 637:   48 8b 3d ca 09 20 00    mov    0x2009ca(%rip),%rdi        # 201008 <__dso_handle>
+ 63e:   e8 0d ff ff ff          callq  550 <__cxa_finalize@plt>
+ 643:   e8 48 ff ff ff          callq  590 <deregister_tm_clones>
+ 648:   c6 05 c9 09 20 00 01    movb   $0x1,0x2009c9(%rip)        # 201018 <__TMC_END__>
+ 64f:   5d                      pop    %rbp
+ 650:   c3                      retq
+ 651:   0f 1f 80 00 00 00 00    nopl   0x0(%rax)
+ 658:   f3 c3                   repz retq
+ 65a:   66 0f 1f 44 00 00       nopw   0x0(%rax,%rax,1)
+
+0000000000000660 <frame_dummy>:
+ 660:   55                      push   %rbp
+ 661:   48 89 e5                mov    %rsp,%rbp
+ 664:   5d                      pop    %rbp
+ 665:   e9 66 ff ff ff          jmpq   5d0 <register_tm_clones>
+
+000000000000066a <main>:
+ 66a:   55                      push   %rbp
+ 66b:   48 89 e5                mov    %rsp,%rbp
+ 66e:   48 83 ec 10             sub    $0x10,%rsp
+ 672:   64 48 8b 04 25 28 00    mov    %fs:0x28,%rax
+ 679:   00 00
+ 67b:   48 89 45 f8             mov    %rax,-0x8(%rbp)
+ 67f:   31 c0                   xor    %eax,%eax
+ 681:   c7 45 f4 64 00 00 00    movl   $0x64,-0xc(%rbp)
+ 688:   8b 05 82 09 20 00       mov    0x200982(%rip),%eax        # 201010 <b>
+ 68e:   89 45 f4                mov    %eax,-0xc(%rbp)
+ 691:   48 8d 45 f4             lea    -0xc(%rbp),%rax
+ 695:   48 8d 35 78 09 20 00    lea    0x200978(%rip),%rsi        # 201014 <shared>
+ 69c:   48 89 c7                mov    %rax,%rdi
+ 69f:   b8 00 00 00 00          mov    $0x0,%eax
+ 6a4:   e8 1b 00 00 00          callq  6c4 <swap>
+ 6a9:   b8 00 00 00 00          mov    $0x0,%eax
+ 6ae:   48 8b 55 f8             mov    -0x8(%rbp),%rdx
+ 6b2:   64 48 33 14 25 28 00    xor    %fs:0x28,%rdx
+ 6b9:   00 00
+ 6bb:   74 05                   je     6c2 <main+0x58>
+ 6bd:   e8 7e fe ff ff          callq  540 <__stack_chk_fail@plt>
+ 6c2:   c9                      leaveq
+ 6c3:   c3                      retq
+
+00000000000006c4 <swap>:
+ 6c4:   55                      push   %rbp
+ 6c5:   48 89 e5                mov    %rsp,%rbp
+ 6c8:   48 89 7d f8             mov    %rdi,-0x8(%rbp)
+ 6cc:   48 89 75 f0             mov    %rsi,-0x10(%rbp)
+ 6d0:   48 8b 45 f8             mov    -0x8(%rbp),%rax
+ 6d4:   8b 10                   mov    (%rax),%edx
+ 6d6:   48 8b 45 f0             mov    -0x10(%rbp),%rax
+ 6da:   8b 00                   mov    (%rax),%eax
+ 6dc:   31 c2                   xor    %eax,%edx
+ 6de:   48 8b 45 f8             mov    -0x8(%rbp),%rax
+ 6e2:   89 10                   mov    %edx,(%rax)
+ 6e4:   48 8b 45 f8             mov    -0x8(%rbp),%rax
+ 6e8:   8b 10                   mov    (%rax),%edx
+ 6ea:   48 8b 45 f0             mov    -0x10(%rbp),%rax
+ 6ee:   8b 00                   mov    (%rax),%eax
+ 6f0:   31 c2                   xor    %eax,%edx
+ 6f2:   48 8b 45 f0             mov    -0x10(%rbp),%rax
+ 6f6:   89 10                   mov    %edx,(%rax)
+ 6f8:   48 8b 45 f0             mov    -0x10(%rbp),%rax
+ 6fc:   8b 10                   mov    (%rax),%edx
+ 6fe:   48 8b 45 f8             mov    -0x8(%rbp),%rax
+ 702:   8b 00                   mov    (%rax),%eax
+ 704:   31 c2                   xor    %eax,%edx
+ 706:   48 8b 45 f8             mov    -0x8(%rbp),%rax
+ 70a:   89 10                   mov    %edx,(%rax)
+ 70c:   90                      nop
+ 70d:   5d                      pop    %rbp
+ 70e:   c3                      retq
+ 70f:   90                      nop
+
+0000000000000710 <__libc_csu_init>:
+ 710:   41 57                   push   %r15
+ 712:   41 56                   push   %r14
+ 714:   49 89 d7                mov    %rdx,%r15
+ 717:   41 55                   push   %r13
+ 719:   41 54                   push   %r12
+ 71b:   4c 8d 25 96 06 20 00    lea    0x200696(%rip),%r12        # 200db8 <__frame_dummy_init_array_entry>
+ 722:   55                      push   %rbp
+ 723:   48 8d 2d 96 06 20 00    lea    0x200696(%rip),%rbp        # 200dc0 <__init_array_end>
+ 72a:   53                      push   %rbx
+ 72b:   41 89 fd                mov    %edi,%r13d
+ 72e:   49 89 f6                mov    %rsi,%r14
+ 731:   4c 29 e5                sub    %r12,%rbp
+ 734:   48 83 ec 08             sub    $0x8,%rsp
+ 738:   48 c1 fd 03             sar    $0x3,%rbp
+ 73c:   e8 cf fd ff ff          callq  510 <_init>
+ 741:   48 85 ed                test   %rbp,%rbp
+ 744:   74 20                   je     766 <__libc_csu_init+0x56>
+ 746:   31 db                   xor    %ebx,%ebx
+ 748:   0f 1f 84 00 00 00 00    nopl   0x0(%rax,%rax,1)
+ 74f:   00
+ 750:   4c 89 fa                mov    %r15,%rdx
+ 753:   4c 89 f6                mov    %r14,%rsi
+ 756:   44 89 ef                mov    %r13d,%edi
+ 759:   41 ff 14 dc             callq  *(%r12,%rbx,8)
+ 75d:   48 83 c3 01             add    $0x1,%rbx
+ 761:   48 39 dd                cmp    %rbx,%rbp
+ 764:   75 ea                   jne    750 <__libc_csu_init+0x40>
+ 766:   48 83 c4 08             add    $0x8,%rsp
+ 76a:   5b                      pop    %rbx
+ 76b:   5d                      pop    %rbp
+ 76c:   41 5c                   pop    %r12
+ 76e:   41 5d                   pop    %r13
+ 770:   41 5e                   pop    %r14
+ 772:   41 5f                   pop    %r15
+ 774:   c3                      retq
+ 775:   90                      nop
+ 776:   66 2e 0f 1f 84 00 00    nopw   %cs:0x0(%rax,%rax,1)
+ 77d:   00 00 00
+
+0000000000000780 <__libc_csu_fini>:
+ 780:   f3 c3                   repz retq
+
+Disassembly of section .fini:
+
+0000000000000784 <_fini>:
+ 784:   48 83 ec 08             sub    $0x8,%rsp
+ 788:   48 83 c4 08             add    $0x8,%rsp
+ 78c:   c3                      retq
