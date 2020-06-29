@@ -1,0 +1,4 @@
+
+git add -A
+git commit -m "内容"
+git push origin master
