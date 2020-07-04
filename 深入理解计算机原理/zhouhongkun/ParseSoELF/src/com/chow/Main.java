@@ -7,13 +7,30 @@ import java.io.InputStream;
 
 public class Main {
 
-    private final static String FILE_PATH = "D:\\JessonDataStruct\\ParseSoELF\\src\\com\\chow\\libhello-jni.so";
+    private final static String FILE_PATH = "D:\\ParseSoELF\\src\\com\\chow\\libhello-jni.so";
 
     public static void main(String[] args) {
 	    // write your code here
         byte[] soBytes = getBytesFromFile(FILE_PATH);
+        System.out.println("parse elf header... ");
+        ParseSoUtil.parseHeader(soBytes);
+        System.out.println("======================================");
 
-        parseHeader(soBytes);
+        System.out.println("parse program header... ");
+        ParseSoUtil.parseProgramHeaderList(soBytes);
+        System.out.println("======================================");
+
+        System.out.println("parse Section header... ");
+        ParseSoUtil.parseSectionHeaderList(soBytes);
+        System.out.println("======================================");
+
+        System.out.println("parse Symbol Table... ");
+        ParseSoUtil.parseSymbolTable(soBytes);
+        System.out.println("======================================");
+
+        System.out.println("parse String Table... ");
+        ParseSoUtil.parseStringTable(soBytes);
+        System.out.println("======================================");
     }
 
     /**
@@ -44,24 +61,5 @@ public class Main {
             }
         }
         return soBytes;
-    }
-
-    private static void parseHeader(byte[] soBytes) {
-        ElfType hdr = new ElfType();
-        hdr.e_ident = Util.copyByte(soBytes, 0, 16);
-        hdr.e_type = Util.copyByte(soBytes, 16, 2);
-        hdr.e_machine = Util.copyByte(soBytes, 18, 2);
-        hdr.e_version = Util.copyByte(soBytes, 20, 4);
-        hdr.e_entry = Util.copyByte(soBytes, 24, 4);
-        hdr.e_phoff = Util.copyByte(soBytes, 28, 4);
-        hdr.e_shoff = Util.copyByte(soBytes, 32, 4);
-        hdr.e_flags = Util.copyByte(soBytes, 36, 4);
-        hdr.e_ehsize = Util.copyByte(soBytes, 40, 2);
-        hdr.e_phentsize = Util.copyByte(soBytes, 42, 2);
-        hdr.e_phnum = Util.copyByte(soBytes, 44, 2);
-        hdr.e_shentsize = Util.copyByte(soBytes, 46, 2);
-        hdr.e_shnum = Util.copyByte(soBytes, 48, 2);
-        hdr.e_shstrndx = Util.copyByte(soBytes, 50, 2);
-        System.out.println(hdr.toString());
     }
 }
